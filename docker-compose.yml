@@ -1,0 +1,7 @@
+﻿services:
+  quizz-world:
+    build: .
+    container_name: quizz-world
+    ports:
+      - "8080:80"
+    restart: unless-stopped
