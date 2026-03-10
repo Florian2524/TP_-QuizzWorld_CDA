@@ -1,9 +1,15 @@
 ﻿window.Quiz = {
+  levelMap: {
+    debutant: "débutant",
+    confirme: "confirmé",
+    expert: "expert"
+  },
+
   async start() {
     try {
       const data = await this.loadCategoryQuestions(appState.category.json);
       const levelKey = this.getJsonLevelKey(appState.level);
-      const questions = data.quizz[levelKey];
+      const questions = data?.quizz?.[levelKey];
 
       if (!Array.isArray(questions) || questions.length === 0) {
         throw new Error("Aucune question trouvée pour ce niveau.");
@@ -28,17 +34,11 @@
       throw new Error(`Chargement impossible : ${jsonPath}`);
     }
 
-    return await response.json();
+    return response.json();
   },
 
   getJsonLevelKey(level) {
-    const map = {
-      debutant: "débutant",
-      confirme: "confirmé",
-      expert: "expert"
-    };
-
-    return map[level];
+    return this.levelMap[level];
   },
 
   getCurrentQuestion() {

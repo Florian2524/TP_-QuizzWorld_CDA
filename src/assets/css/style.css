@@ -9,7 +9,7 @@
 body {
   min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
-  background-color: #6691c2;
+  background: #6691c2;
   color: #111;
 }
 
@@ -27,37 +27,106 @@ input {
   min-height: 100vh;
 }
 
+.hidden {
+  display: none;
+}
+
 /* =========================
-   ACCUEIL
+   BLOCS COMMUNS
 ========================= */
 
-.home-screen {
+.home-screen,
+.summary-page,
+.quiz-page,
+.result-page,
+.error-page {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   padding: 0;
 }
 
-.home-shell {
+.home-shell,
+.summary-shell,
+.quiz-shell,
+.result-shell,
+.error-shell {
   width: 100%;
   max-width: 1000px;
+}
+
+.home-shell {
   padding: 8px 10px 20px;
 }
 
-.home-shell__header {
+.summary-shell,
+.quiz-shell,
+.result-shell,
+.error-shell {
+  padding: 8px 12px 30px;
+}
+
+.home-shell__header,
+.summary-header,
+.quiz-header,
+.result-header {
   text-align: center;
-  margin-bottom: 18px;
   padding-top: 8px;
 }
 
-.home-shell__title {
-  margin: 0;
+.home-shell__header {
+  margin-bottom: 18px;
+}
+
+.summary-header,
+.quiz-header,
+.result-header {
+  margin-bottom: 28px;
+}
+
+.home-shell__title,
+.summary-header__title,
+.quiz-header__title,
+.result-header__title {
   font-family: "Special Elite", serif;
-  font-size: 3.6rem;
-  color: #ffffff;
+  color: #fff;
   letter-spacing: 2px;
   text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
 }
+
+.home-shell__title {
+  font-size: 3.6rem;
+}
+
+.summary-header__title,
+.quiz-header__title,
+.result-header__title {
+  font-size: 3.7rem;
+  margin-bottom: 18px;
+}
+
+.summary-header__subtitle,
+.quiz-header__subtitle,
+.result-header__subtitle {
+  font-family: "Special Elite", serif;
+  font-size: 2rem;
+  color: #fff;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+  margin-bottom: 18px;
+}
+
+.summary-header__intro {
+  font-family: "Special Elite", serif;
+  font-size: 1.65rem;
+  color: #1d1d1d;
+  letter-spacing: 5px;
+  text-align: center;
+}
+
+/* =========================
+   ACCUEIL
+========================= */
 
 .home-shell__grid {
   display: grid;
@@ -66,35 +135,33 @@ input {
 }
 
 .home-card {
+  padding: 8px 10px 12px;
   background: #ff7a00;
   border: 2px solid #222;
   border-radius: 18px;
   box-shadow: 2px 2px 0 #111;
-  padding: 8px 10px 12px;
 }
 
 .home-card__title {
-  font-family: "Lobster", cursive;
-  font-size: 1.05rem;
-  font-weight: 400;
-  color: #ffffff;
-  text-align: center;
-  margin-bottom: 8px;
-  line-height: 1.1;
   min-height: 34px;
+  margin-bottom: 8px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  font: 400 1.05rem "Lobster", cursive;
+  color: #fff;
+  text-align: center;
+  line-height: 1.1;
 }
 
 .home-card__media {
   width: 100%;
   height: 145px;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 2px solid #222;
-  background: #ffffff;
   margin-bottom: 10px;
+  overflow: hidden;
+  background: #fff;
+  border: 2px solid #222;
+  border-radius: 16px;
 }
 
 .home-card__image {
@@ -108,7 +175,6 @@ input {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  flex-wrap: nowrap;
 }
 
 .home-card__level {
@@ -117,7 +183,7 @@ input {
   gap: 4px;
   font-family: "Lobster", cursive;
   font-size: 0.72rem;
-  color: #ffffff;
+  color: #fff;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -132,10 +198,6 @@ input {
    MODALE
 ========================= */
 
-.hidden {
-  display: none;
-}
-
 .modal {
   position: fixed;
   inset: 0;
@@ -145,7 +207,7 @@ input {
 .modal__overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.45);
 }
 
 .modal__content {
@@ -154,10 +216,10 @@ input {
   width: calc(100% - 32px);
   max-width: 460px;
   margin: 120px auto 0;
-  background-color: #ffffff;
+  padding: 24px 22px 22px;
+  background: #fff;
   border: 3px solid #2f4f73;
   border-radius: 20px;
-  padding: 24px 22px 22px;
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
 }
 
@@ -165,12 +227,12 @@ input {
   position: absolute;
   top: 10px;
   right: 12px;
-  border: none;
+  border: 0;
   background: transparent;
   font-size: 2rem;
   line-height: 1;
-  cursor: pointer;
   color: #334155;
+  cursor: pointer;
 }
 
 .modal__title {
@@ -182,9 +244,9 @@ input {
 
 .modal__text {
   margin-bottom: 18px;
+  color: #334155;
   text-align: center;
   line-height: 1.5;
-  color: #334155;
 }
 
 .modal__form {
@@ -217,10 +279,10 @@ input {
 }
 
 .modal__submit {
-  border: none;
-  border-radius: 12px;
   padding: 12px 16px;
-  background-color: #ff7a00;
+  border: 0;
+  border-radius: 12px;
+  background: #ff7a00;
   color: #fff;
   font-weight: 700;
   cursor: pointer;
@@ -232,78 +294,17 @@ input {
 }
 
 /* =========================
-   STYLE COMMUN MAQUETTE
-========================= */
-
-.summary-page,
-.quiz-page,
-.result-page,
-.error-page {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 0;
-}
-
-.summary-shell,
-.quiz-shell,
-.result-shell,
-.error-shell {
-  width: 100%;
-  max-width: 1000px;
-  padding: 8px 12px 30px;
-}
-
-.summary-header,
-.quiz-header,
-.result-header {
-  text-align: center;
-  margin-bottom: 28px;
-  padding-top: 8px;
-}
-
-.summary-header__title,
-.quiz-header__title,
-.result-header__title {
-  font-family: "Special Elite", serif;
-  font-size: 3.7rem;
-  color: #ffffff;
-  letter-spacing: 2px;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
-  margin-bottom: 18px;
-}
-
-.summary-header__subtitle,
-.quiz-header__subtitle,
-.result-header__subtitle {
-  font-family: "Special Elite", serif;
-  font-size: 2rem;
-  color: #ffffff;
-  letter-spacing: 2px;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
-  margin-bottom: 18px;
-}
-
-.summary-header__intro {
-  font-family: "Special Elite", serif;
-  font-size: 1.65rem;
-  color: #1d1d1d;
-  letter-spacing: 5px;
-  text-align: center;
-}
-
-/* =========================
-   RECAPITULATIF
+   RECAP / BOUTONS
 ========================= */
 
 .summary-visual {
   width: 100%;
   max-width: 580px;
   margin: 0 auto 56px;
-  background: #ffffff;
+  overflow: hidden;
+  background: #fff;
   border: 10px solid #f6f6f6;
   border-radius: 22px;
-  overflow: hidden;
 }
 
 .summary-visual__image {
@@ -323,15 +324,19 @@ input {
   margin-top: 10px;
 }
 
-.summary-button {
-  border: 2px solid #9b4f00;
+.summary-button,
+.quiz-next-btn {
   background: #ff7a00;
-  color: #ffffff;
-  padding: 10px 18px;
-  min-width: 160px;
-  font-size: 0.95rem;
+  color: #fff;
   cursor: pointer;
+}
+
+.summary-button {
+  min-width: 160px;
+  padding: 10px 18px;
+  border: 2px solid #9b4f00;
   box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.25);
+  font-size: 0.95rem;
 }
 
 .summary-button--secondary {
@@ -351,8 +356,8 @@ input {
 .quiz-question-box__text {
   font-size: 1.05rem;
   font-weight: 700;
+  color: #111;
   text-align: center;
-  color: #111111;
   line-height: 1.5;
 }
 
@@ -365,19 +370,18 @@ input {
 }
 
 .answer-card {
-  background-color: #e67e1d;
-  border: 1px solid #ffffff;
-  border-radius: 18px;
+  min-height: 52px;
   padding: 18px 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e67e1d;
+  border: 1px solid #fff;
+  border-radius: 18px;
   font-weight: 700;
   text-align: center;
-  min-height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   user-select: none;
   cursor: grab;
-  box-shadow: none;
   transition: transform 0.15s ease, opacity 0.15s ease, background-color 0.15s ease;
 }
 
@@ -391,7 +395,7 @@ input {
 }
 
 .answer-card--correct {
-  background-color: #8fd694;
+  background: #8fd694;
   border-color: #2f6f35;
 }
 
@@ -412,31 +416,26 @@ input {
   max-width: 265px;
   min-height: 85px;
   display: flex;
-  align-items: center;
   justify-content: flex-start;
-  text-align: left;
-  background-color: #d8d8d8;
-  border: 3px dashed #111111;
+  align-items: center;
   padding: 14px 10px;
+  background: #d8d8d8;
+  border: 3px dashed #111;
   color: #7f6d00;
-  font-weight: 400;
-  font-family: Georgia, "Times New Roman", serif;
+  font: 400 1rem Georgia, "Times New Roman", serif;
+  text-align: left;
 }
 
 .quiz-actions {
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin-top: 0;
+  align-items: center;
 }
 
 .quiz-next-btn {
-  border: 1px solid #9b4f00;
   padding: 6px 12px;
-  background-color: #ff7a00;
-  color: #ffffff;
+  border: 1px solid #9b4f00;
   font-size: 0.9rem;
-  cursor: pointer;
 }
 
 .quiz-next-btn:disabled {
@@ -445,41 +444,42 @@ input {
 }
 
 .quiz-feedback {
-  margin: 28px auto 0;
   max-width: 560px;
-  background-color: #ffffff;
+  margin: 28px auto 0;
+  padding: 14px 16px;
+  background: #fff;
   border: 2px solid #111;
   border-radius: 8px;
-  padding: 14px 16px;
-  line-height: 1.5;
+  color: inherit;
   text-align: center;
+  line-height: 1.5;
 }
 
 .quiz-dropzone--over {
-  background-color: #dbeafe;
+  background: #dbeafe;
   border-color: #2563eb;
 }
 
 .quiz-dropzone--correct {
-  background-color: #bbf7d0;
+  background: #bbf7d0;
   border-color: #15803d;
   color: #166534;
 }
 
 .quiz-dropzone--wrong {
-  background-color: #fecaca;
+  background: #fecaca;
   border-color: #b91c1c;
   color: #991b1b;
 }
 
 .quiz-feedback--correct {
-  background-color: #ecfdf5;
+  background: #ecfdf5;
   border-color: #15803d;
   color: #166534;
 }
 
 .quiz-feedback--wrong {
-  background-color: #fef2f2;
+  background: #fef2f2;
   border-color: #b91c1c;
   color: #991b1b;
 }
@@ -491,30 +491,30 @@ input {
 .result-card {
   max-width: 520px;
   margin: 0 auto 40px;
+  padding: 28px 20px;
   background: rgba(255, 255, 255, 0.35);
   border: 2px solid rgba(255, 255, 255, 0.4);
-  padding: 28px 20px;
   text-align: center;
 }
 
 .result-card__player {
+  margin-bottom: 16px;
   font-family: "Special Elite", serif;
   font-size: 1.5rem;
-  color: #ffffff;
-  margin-bottom: 16px;
+  color: #fff;
 }
 
 .result-card__score {
+  margin-bottom: 14px;
   font-size: 3rem;
   font-weight: 700;
   color: #ff7a00;
-  margin-bottom: 14px;
 }
 
 .result-card__message {
   font-size: 1.05rem;
-  line-height: 1.5;
   color: #111;
+  line-height: 1.5;
 }
 
 /* =========================
@@ -522,22 +522,22 @@ input {
 ========================= */
 
 .error-shell {
-  text-align: center;
   padding-top: 70px;
+  text-align: center;
 }
 
 .error-panel__title {
+  margin-bottom: 24px;
   font-family: "Special Elite", serif;
   font-size: 3rem;
-  color: #ffffff;
-  margin-bottom: 24px;
+  color: #fff;
 }
 
 .error-panel__text {
-  font-size: 1.15rem;
-  line-height: 1.5;
-  color: #111;
   margin-bottom: 22px;
+  font-size: 1.15rem;
+  color: #111;
+  line-height: 1.5;
 }
 
 /* =========================
@@ -545,12 +545,9 @@ input {
 ========================= */
 
 @media (max-width: 900px) {
-  .home-shell__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
+  .home-shell__grid,
   .answers-grid {
-    grid-template-columns: repeat(2, minmax(140px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .summary-header__title,

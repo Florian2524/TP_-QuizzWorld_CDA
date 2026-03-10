@@ -3,8 +3,12 @@
     const answerCards = document.querySelectorAll(".answer-card");
     const dropzone = document.getElementById("quiz-dropzone");
 
+    if (!dropzone || answerCards.length === 0) {
+      return;
+    }
+
     answerCards.forEach((card) => {
-      card.setAttribute("draggable", "true");
+      card.draggable = true;
 
       card.addEventListener("dragstart", (event) => {
         if (appState.hasAnsweredCurrentQuestion) {

@@ -1,41 +1,13 @@
 ﻿window.UI = {
+  levelLabels: {
+    debutant: "Débutant",
+    confirme: "Confirmé",
+    expert: "Expert"
+  },
+
   renderHome() {
-    const app = document.getElementById("app");
-
-    let cardsHtml = "";
-
-    appState.categories.forEach(function (category) {
-      cardsHtml += `
-        <article class="home-card" data-category-id="${category.id}">
-          <h2 class="home-card__title">${category.title}</h2>
-
-          <div class="home-card__media">
-            <img
-              src="${category.image}"
-              alt="${category.title}"
-              class="home-card__image"
-            >
-          </div>
-
-          <div class="home-card__levels">
-            <label class="home-card__level">
-              <input type="radio" name="level-${category.id}" value="debutant">
-              <span>Débutant</span>
-            </label>
-
-            <label class="home-card__level">
-              <input type="radio" name="level-${category.id}" value="confirme">
-              <span>Confirmé</span>
-            </label>
-
-            <label class="home-card__level">
-              <input type="radio" name="level-${category.id}" value="expert">
-              <span>Expert</span>
-            </label>
-          </div>
-        </article>
-      `;
-    });
+    const app = this.getApp();
+    const cardsHtml = appState.categories.map((category) => this.buildHomeCard(category)).join("");
 
     app.innerHTML = `
       <section class="home-screen">
@@ -85,7 +57,7 @@
   },
 
   renderSummary() {
-    const app = document.getElementById("app");
+    const app = this.getApp();
 
     app.innerHTML = `
       <section class="summary-page">
@@ -121,7 +93,7 @@
   },
 
   renderQuiz() {
-    const app = document.getElementById("app");
+    const app = this.getApp();
     const currentQuestion = Quiz.getCurrentQuestion();
 
     if (!currentQuestion) {
@@ -130,17 +102,7 @@
     }
 
     const answersHtml = currentQuestion.propositions
-      .map((proposition, index) => {
-        return `
-          <div
-            class="answer-card"
-            data-answer-index="${index}"
-            data-answer-value="${this.escapeHtmlAttribute(proposition)}"
-          >
-            ${proposition}
-          </div>
-        `;
-      })
+      .map((proposition, index) => this.buildAnswerCard(proposition, index))
       .join("");
 
     app.innerHTML = `
@@ -185,7 +147,7 @@
   },
 
   renderFinalScore() {
-    const app = document.getElementById("app");
+    const app = this.getApp();
     const total = appState.questions.length;
     const score = appState.score;
     const message = this.getScoreMessage(score, total);
@@ -230,7 +192,7 @@
   },
 
   renderError(message) {
-    const app = document.getElementById("app");
+    const app = this.getApp();
 
     app.innerHTML = `
       <section class="error-page">
@@ -255,14 +217,17 @@
     const levelInputs = document.querySelectorAll('.home-card__level input[type="radio"]');
 
     levelInputs.forEach((input) => {
-      input.addEventListener("change", (event) => {
-        const selectedInput = event.target;
-        const card = selectedInput.closest(".home-card");
-        const categoryId = card.dataset.categoryId;
+      input.addEventListener("change", ({ target }) => {
+        const card = target.closest(".home-card");
+        const categoryId = card?.dataset.categoryId;
         const category = appState.categories.find((item) => item.id === categoryId);
 
+        if (!category) {
+          return;
+        }
+
         appState.category = category;
-        appState.level = selectedInput.value;
+        appState.level = target.value;
 
         this.openPlayerModal();
       });
@@ -313,45 +278,52 @@
 
     feedback.classList.remove("quiz-feedback--correct", "quiz-feedback--wrong");
     dropzone.classList.remove("quiz-dropzone--correct", "quiz-dropzone--wrong");
-
     dropzone.textContent = selectedAnswer;
 
     answerCards.forEach((card) => {
-      card.setAttribute("draggable", "false");
+      card.draggable = false;
       card.classList.add("answer-card--locked");
     });
 
     if (result.isCorrect) {
-      dropzone.classList.add("quiz-dropzone--correct");
-      draggedCard.classList.add("answer-card--correct");
-
-      feedback.classList.remove("hidden");
-      feedback.classList.add("quiz-feedback--correct");
-      feedback.innerHTML = `
-        <strong>Bonne réponse !</strong>
-        ${result.anecdote ? `<br>${result.anecdote}` : ""}
-      `;
+      this.showCorrectAnswer(feedback, dropzone, draggedCard, result);
     } else {
-      dropzone.classList.add("quiz-dropzone--wrong");
-      draggedCard.classList.add("answer-card--wrong-choice");
-
-      const correctCard = Array.from(answerCards).find((card) => {
-        return card.dataset.answerValue === result.correctAnswer;
-      });
-
-      if (correctCard) {
-        correctCard.classList.add("answer-card--correct");
-      }
-
-      feedback.classList.remove("hidden");
-      feedback.classList.add("quiz-feedback--wrong");
-      feedback.innerHTML = `
-        <strong>Mauvaise réponse.</strong><br>
-        La bonne réponse était : ${result.correctAnswer}
-      `;
+      this.showWrongAnswer(feedback, dropzone, draggedCard, answerCards, result);
     }
 
     nextButton.disabled = false;
+  },
+
+  showCorrectAnswer(feedback, dropzone, draggedCard, result) {
+    dropzone.classList.add("quiz-dropzone--correct");
+    draggedCard.classList.add("answer-card--correct");
+
+    feedback.classList.remove("hidden");
+    feedback.classList.add("quiz-feedback--correct");
+    feedback.innerHTML = `
+      <strong>Bonne réponse !</strong>
+      ${result.anecdote ? `<br>${result.anecdote}` : ""}
+    `;
+  },
+
+  showWrongAnswer(feedback, dropzone, draggedCard, answerCards, result) {
+    dropzone.classList.add("quiz-dropzone--wrong");
+    draggedCard.classList.add("answer-card--wrong-choice");
+
+    const correctCard = Array.from(answerCards).find(
+      (card) => card.dataset.answerValue === result.correctAnswer
+    );
+
+    if (correctCard) {
+      correctCard.classList.add("answer-card--correct");
+    }
+
+    feedback.classList.remove("hidden");
+    feedback.classList.add("quiz-feedback--wrong");
+    feedback.innerHTML = `
+      <strong>Mauvaise réponse.</strong><br>
+      La bonne réponse était : ${result.correctAnswer}
+    `;
   },
 
   openPlayerModal() {
@@ -404,13 +376,7 @@
   },
 
   formatLevelLabel(level) {
-    const labels = {
-      debutant: "Débutant",
-      confirme: "Confirmé",
-      expert: "Expert"
-    };
-
-    return labels[level] || level;
+    return this.levelLabels[level] || level;
   },
 
   getScoreMessage(score, total) {
@@ -431,11 +397,58 @@
     return "Ce n'est qu'un début, retente le quiz pour progresser.";
   },
 
+  buildHomeCard(category) {
+    return `
+      <article class="home-card" data-category-id="${category.id}">
+        <h2 class="home-card__title">${category.title}</h2>
+
+        <div class="home-card__media">
+          <img
+            src="${category.image}"
+            alt="${category.title}"
+            class="home-card__image"
+          >
+        </div>
+
+        <div class="home-card__levels">
+          ${this.buildLevelInput(category.id, "debutant", "Débutant")}
+          ${this.buildLevelInput(category.id, "confirme", "Confirmé")}
+          ${this.buildLevelInput(category.id, "expert", "Expert")}
+        </div>
+      </article>
+    `;
+  },
+
+  buildLevelInput(categoryId, value, label) {
+    return `
+      <label class="home-card__level">
+        <input type="radio" name="level-${categoryId}" value="${value}">
+        <span>${label}</span>
+      </label>
+    `;
+  },
+
+  buildAnswerCard(proposition, index) {
+    return `
+      <div
+        class="answer-card"
+        data-answer-index="${index}"
+        data-answer-value="${this.escapeHtmlAttribute(proposition)}"
+      >
+        ${proposition}
+      </div>
+    `;
+  },
+
   escapeHtmlAttribute(value) {
     return String(value)
       .replaceAll("&", "&amp;")
       .replaceAll('"', "&quot;")
       .replaceAll("<", "&lt;")
       .replaceAll(">", "&gt;");
+  },
+
+  getApp() {
+    return document.getElementById("app");
   }
 };

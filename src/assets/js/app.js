@@ -1,4 +1,4 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+﻿document.addEventListener("DOMContentLoaded", () => {
   UI.renderHome();
-  console.log("Quizz World démarré");
+  console.info("Quizz World démarré");
 });

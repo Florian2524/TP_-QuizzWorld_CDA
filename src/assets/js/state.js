@@ -1,4 +1,5 @@
 ﻿window.appState = {
+  // Données de session
   playerName: "",
   category: null,
   level: "",
@@ -7,6 +8,7 @@
   score: 0,
   hasAnsweredCurrentQuestion: false,
 
+  // Référentiel des rubriques disponibles
   categories: [
     {
       id: "internet",
